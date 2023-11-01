@@ -11,3 +11,8 @@ export const galleryCreationControl = atom({
     key: 'galleryCreation', // unique ID (with respect to other atoms/selectors)
     default: false, // default value (aka initial value)
   });
+
+  export const galleryUpdateControl = atom({
+    key: 'galleryUpdate', // unique ID (with respect to other atoms/selectors)
+    default: false, // default value (aka initial value)
+  });

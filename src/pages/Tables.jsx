@@ -21,7 +21,11 @@ import { useState } from "react";
 import { deletePost, get, post } from "../pocketbase/pocketbase";
 import { useTranslation } from "react-i18next";
 import { useRecoilState } from "recoil";
-import { galleryCreationControl } from "../atoms/GalleryAtoms";
+import {
+  galleryCreationControl,
+  galleryUpdateControl,
+} from "../atoms/GalleryAtoms";
+import UpdateGalleryForm from "../components/forms/UpdateGalleryForm";
 
 function Tables() {
   const { t, i18n } = useTranslation();
@@ -30,7 +34,8 @@ function Tables() {
   const [addNewcontrol, setAddNewControl] = useRecoilState(
     galleryCreationControl
   );
-  const [deleteId, setDeleteId] = useState("");
+  const [Updatecontrol, setUpdateControl] =
+    useRecoilState(galleryUpdateControl);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["gallery"],
@@ -52,17 +57,15 @@ function Tables() {
     );
   }
 
-
   const showModal = () => {
     setIsModalOpen(true);
   };
 
-  
-function handleDelete(id){
-  deletePost(id);
-  setIsModalOpen(false)
-  refetch();
-}
+  function handleDelete(id) {
+    deletePost(id);
+    setIsModalOpen(false);
+    refetch();
+  }
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -111,17 +114,21 @@ function handleDelete(id){
             <Button type="link" danger block onClick={() => showModal()}>
               <DeleteFilled />
             </Button>
-            <Button type="link" block >
+            <Button type="link" block onClick={() => setUpdateControl(true)}>
               <EditOutlined />
             </Button>
             <Modal
               title="Basic Modal"
               open={isModalOpen}
-              onOk={() => {handleDelete(rec.id) }}
+              onOk={() => {
+                handleDelete(rec.id);
+              }}
               onCancel={handleCancel}
             >
               <p>Delete? {rec.title}</p>
             </Modal>
+
+            <UpdateGalleryForm id={rec.id} body={rec} />
           </div>
         );
       },
